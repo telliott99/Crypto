@@ -1,0 +1,25 @@
+from pydes import des
+key = '133457799BBCDFF1'
+msg = '0123456789abcdef'
+ctx = des(msg,key)
+
+
+>>> from pydes import des
+>>> key = '133457799BBCDFF1'
+>>> msg = '0123456789abcdef'
+>>> ctx = des(msg,key)
+>>> ctx
+'85e813540f0ab405'
+>>> des(ctx,key,mode="decrypt")
+'0123456789abcdef'
+>>>
+
+Or do:
+
+> python test.py 
+85e813540f0ab405
+0123456789abcdef
+> python3 test.py 
+85e813540f0ab405
+0123456789abcdef
+>

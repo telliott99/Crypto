@@ -1,0 +1,14 @@
+CBC in 16-byte mode is different than just using a half of a 16-byte key
+
+
+Triple-DES is just DES with two 56-bit keys applied. Given a plaintext message
+
+* the first key is used to DES-encrypt the message
+* the second key is used to DES-decrypt the encrypted message
+* the twice-scrambled message is then encrypted again with the first key
+
+i.e. Triple DES is 8-byte
+
+
+
+

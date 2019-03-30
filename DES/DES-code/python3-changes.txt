@@ -1,0 +1,76 @@
+TL;DR
+
+I had trouble with the imports.
+
+Inside the package we can't see the package name.  Hence the "." syntax in 
+
+__init__.py      from .DES_ECB import des
+
+But
+
+DES_ECB.py       imports utils, info and des_functions
+des_functions.py imports utils, info
+
+That second step import 
+DES_ECB.py -> des_functions -> utils, info
+
+causes trouble when DES_ECB is run as __main__
+
+#---------------------
+
+I finally went with:
+
+try:
+    from pydes import utils as ut
+    from pydes import info
+    from pydes.des_functions import *
+    
+except ImportError:
+    import platform
+    t = (platform.python_version(),__name__)
+    print("triggered ImportError:\n  Python%s\n  %s" % t)
+    
+    import utils as ut
+    import info
+    from des_functions import *
+
+#---------------------
+
+Try ``test.sh`` to make sure everything works.
+
+> ./test.sh
+python test.py
+85e813540f0ab405
+0123456789abcdef
+
+python3 test.py
+85e813540f0ab405
+0123456789abcdef
+
+python pydes/DES_ECB.py
+triggered ImportError:
+  Python2.7.15
+  __main__
+triggered ImportError:
+  Python2.7.15
+  des_functions
+ctx: 85e813540f0ab405
+ptx: 0123456789abcdef
+
+python3 pydes/DES_ECB.py
+triggered ImportError:
+  Python3.7.2
+  __main__
+triggered ImportError:
+  Python3.7.2
+  des_functions
+ctx: 85e813540f0ab405
+ptx: 0123456789abcdef
+
+The try block executes fine for both Python 2 and 3 when doing python test.py 
+
+i.e. from pydes import des
+which then does from .DES_ECB import des
+
+When doing python pydes/DES_ECB.py we trigger an Import Error which can be fixed by detecting __main__ but this doesn't work when pydes/DES_ECB.py leads to import des_functions.
+
