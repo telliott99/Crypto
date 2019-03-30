@@ -1,4 +1,4 @@
-import aes_keys
+import aes_key_expand
 from gmath import gmultiply as gm
 from gmath import xor, xor_reduce
 import fmt
@@ -43,7 +43,7 @@ def do_round(L, keyL, n):
 
 def decrypt(k,ctx):
     L = [ord(c) for c in k]
-    keyL = aes_keys.get_keys(L)
+    keyL = aes_key_expand.get_keys(L)
     # reverse!
     keyL = list(reversed(keyL))
     

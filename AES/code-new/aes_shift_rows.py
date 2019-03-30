@@ -1,7 +1,7 @@
 import fmt
 
 def shift_rows(L):
-    print("shift_row")
+    print("shift_rows")
     # L displayed *by columns*
     iL = [0,5,10,15,4,9,14,3,
           8,13,2,7,12,1,6,11]

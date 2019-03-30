@@ -1,6 +1,7 @@
 import fmt
 from gmath import xor
-import aes_keys
+import aes_key_expand
+import aes_utils as ut
 from aes_sub_bytes import sub_bytes
 from aes_shift_rows import shift_rows
 from aes_mix_columns import mix_columns
@@ -42,13 +43,18 @@ def do_round(L, keyL, n):
     return result
 
 def encrypt(k,p):
-    L = [ord(c) for c in k]
-    keyL = aes_keys.get_keys(L)
-    
-    L = [ord(c) for c in p]
     print("plaintext: %s" % p)
     print("keytext  : %s" % k)
     
+    L = ut.convert(k)
+    print("key as hex:")
+    print(ut.printable(L))
+    keyL = aes_key_expand.get_keys(L)
+    
+    L = ut.convert(p)
+    print("plaintext as hex:")
+    print(ut.printable(L))
+        
     fmt.show(keyL[0], 'key:')
     L = do_round0(L, keyL[0])
     for n in range(1,11):
@@ -68,5 +74,5 @@ if __name__ == "__main__":
 
     k = "Thats my Kung Fu"
     p = "Two One Nine Two"
-    hex_ctx = encrypt(k,p)
+    ctx = encrypt(k,p)
 

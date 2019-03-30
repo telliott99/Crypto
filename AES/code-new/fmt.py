@@ -12,7 +12,4 @@ def show(L, s=None):
         pL.append(' '.join(iline) + ' | ' + ' '.join(hline))
     print('\n'.join(pL))
 
-def input(s):
-    sL = s.strip().split()
-    return [int(c) for c in sL]
-    
+

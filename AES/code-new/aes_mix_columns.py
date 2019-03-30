@@ -47,3 +47,9 @@ def inv_mix_columns(L):
     rL.extend(f(L[12:16]))
     fmt.show(rL)
     return rL
+
+def test():
+    pass
+    
+if __name__ == "__main__":
+    test()
