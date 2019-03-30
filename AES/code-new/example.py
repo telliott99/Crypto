@@ -27,8 +27,7 @@ s += '0123456789'
 
 while len(k) < SZ: 
     k += random.choice(s)
-
-print("Key was too short so I added some more.")
+    print("Key was too short so I added some more.")
     
 #-------------------
 # p = "strawberryfields"

@@ -1,4 +1,3 @@
-Key was too short so I added some more.
 plaintext: Two One Nine Two
 keytext  : Thats my Kung Fu
 key:
