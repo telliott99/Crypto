@@ -160,4 +160,4 @@ f8 26 d4 ce 92 41 9d 63 51 fd 38 90 4d b5 93 47
 
 These are tables of the **powers** of the base, either ``0x03``  or ``0x06`` in GF(2<sup>8</sup>).
 
-We could call it a table of **exponents**.  We'll use it going forward.
+We could call it a table of **exponents**.  We'll use it going forward.  

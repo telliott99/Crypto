@@ -26,8 +26,8 @@ def do_round0(L, kL0):
     return result
     
 def round(L, kL, n):
-    L = sub_bytes(L)
-    L = shift_rows(L)
+    L = sub_bytes(L)  # order of first two
+    L = shift_rows(L) # does not matter
     if not n == 10:
         L = mix_columns(L)
     L = add_round_key(L, kL[n])

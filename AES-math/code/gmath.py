@@ -29,3 +29,8 @@ def gmultiply(a,b,p=283):
         a = a << 1          # left-shift
     return gmod(r,p)
 
+def xor_reduce(L):
+    r = 0
+    for n in L:
+        r = r ^ n
+    return r

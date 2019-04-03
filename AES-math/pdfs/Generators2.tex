@@ -18,14 +18,16 @@
 \begin{document}
 \maketitle
 
-\large
-To summarize where we are, we're working with a specific Galois field that is useful in cryptography, $GF(2^8)$.  This field contains the additive identity $0 =$ \textbf{0x00}, the multiplicative identity $1 =$ \textbf{0x01}, as well as 254 additional elements, namely the integers in $[2,255]$ or hex values in \textbf{0x02-0xff}, for a total of $256$ or $2^8$.
+\Large
+To summarize where we are, we're working with a specific Galois field that is useful in cryptography, $GF(2^8)$.  
+
+This field contains the multiplicative identity $1 =$ \textbf{0x01} (but not \textbf{0x00}), as well as 254 additional elements, namely the integers in $[2,255]$ or hex values in \textbf{0x02-0xff}.
 
 Addition is defined simply as $\oplus$ (XOR).  Each element is its own additive inverse (since $a \oplus a = 0$ for every $a$), so subtraction is the same as addition.
 
 $GF(2^8)$ is a finite field.  To achieve this, if addition would result in a value larger than $255$ = \textbf{0xff}, we take the modulus with a special value, called $m(x)$.  Taking the modulus means keeping the remainder from division.
 
-For reasons that we need to explore, $m(x)$ is binary \textbf{1 0001 1011}.  Since the value from addition of two numbers will never exceed \textbf{0xff + 0xff = 0x01fe}, rather than dividing we can simply subtract the modulus once from the result.  In fact, for any number, no matter how large, we could take the modulus by repeated subtraction of $m(x)$.
+For reasons that we need to explore, $m(x)$ is binary \textbf{1 0001 1011}.  For any number, no matter how large, we could take the modulus by repeated subtraction of $m(x)$.
 
 To do this in binary:  $\oplus$ the value with \textbf{1 0001 1011}.
 
@@ -41,16 +43,16 @@ To multiply by a power of 2 such as $2^n$, multiply by 2, $n$ times.
 
 To multiply by any other number, decompose the number into its constituent powers of two, do those multiplications, and then add the results by the $\oplus$ operation.
 
-If there is a possibility of generating a number larger than $2^9 - 1$, then we might have to do repeated $\oplus$ (similuating division) or some other method to reduce the result.  It should be possible to wait until the very end to do the $\oplus$, but that bears investigation.
+If there is a possibility of generating a number larger than $2^9 - 1$, then we might have to do repeated $\oplus$ (division) or some other method to reduce the result.  It is possible to wait until the very end to do the $\oplus$, but it's often advantageous to do mod as we go.
 
 \subsection*{generators}
 In implementing AES, my first approach was to copy tables that list the results of multiplying all numbers in $[0,255]$ by the numbers $2, 3, 9, 11, 13, 14$.
 
 My second approach was to use the algorithm described above to generate such tables.
 
-Last time we discussed generators, which leads to a third approach.
+Then I discovered some pages about generators, which leads to a third approach.
 
-It turns out that fields such as the one we're working with have the property that particular numbers may be generators (also called primitive elements) for the entire field, in the following sense:  all elements of the field except zero can be written as $g^i$ for some positive integer $i$ and generator $g$.  
+It turns out that fields such as the one we're working with have the property that particular numbers may be generators (also called primitive elements) for the entire field, in the following sense:  all elements of the field can be written as $g^i$ for some positive integer $i$ and generator $g$.  
 
 In particular, \textbf{0x03} is a generator for $GF(2^8)$.  if we implement multiplication by $3$ as described above (that is, with $\oplus \ 27$), and generate the powers from $3^2$ to $3^{255}$, we will generate all the values $[1,255]$, all the values in the field, as a result.  They will be generated in some order (obviously not the usual order) as a list of 255 values.
 
@@ -58,9 +60,9 @@ What is great about this is we can implement multiplication using this table of 
 
 We start by reversing the list of exponents to make a list of logarithms. For each index $i$ into the exponents list, find the value of that power, call it $j$ (equal to $g^i$), then find the index $j$ in the logarithms list and write the value $i$ there.  The first list maps the values $[1,255]$ uniquely to the same set of values --- the relationship is bijective, or one-to-one.
 
-To multiply $a \times b$, look up each logarithm in the second table, add the two together, and look up the anti-logarithm in the first table.  That is your result.  The beauty is there is no approximation and no need for interpolation.  The result is exact.
+To multiply $a \times b$, look up each logarithm in the second table, add the two together, and look up the anti-logarithm in the first table.  That is your result.  The beauty is there is no approximation and no need for interpolation.  The result is exact.  (If you remember interpolating log tables, you are not alone.  There is none of that).
 
-There are apparently other generators for $GF(2^8)$, but \textbf{0x03} is the smallest, according to my source.  I am curious about what other numbers might be generators for the field.
+There are other generators for $GF(2^8)$, but \textbf{0x03} is the smallest.  I am curious about what other numbers might be generators for the field.
 
 \subsection*{coding the matrix}
 

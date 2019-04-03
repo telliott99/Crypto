@@ -7,19 +7,24 @@ SZ = 16
 # hex string
 # plaintext string 
 
-def convert(s):
+def convert(s, v=False):
+    if v:  print('s')
+    if v:  print(s)
     if type(s) == type([1,2,3]):
+        if v:  print('list')
         v = s[0]
         if type(v) == type(2):
             return s
         if type(v) == type('abc'):
             return [int(c,base=16) for c in s]
     if type(s) == type('abc'):
+        if v:  print('string')
         L = s.strip().split()
         try:
-            hL = [hex(h) for h in L]
-            return [int(h,base=16) for h in hL]
+            if v:  print('try')
+            return [int(h,base=16) for h in L]
         except:
+            if v:  print('except')
             return [ord(c) for c in s]
 
 def printable(L):

@@ -1,24 +1,16 @@
+# we show that 
+# fM x fM x fM = rM
+# fM x fM x fM x fM = I
+# so
+# fM x rM = I
+
 from gmath import gmultiply as gm
-
-def line_fmt(L,n):
-    pL = [str(i).rjust(n) for i in L]
-    return ' '.join(pL)
-
-def fmt(L):
-    rL = list()
-    for row in L:
-        rL.append(line_fmt(row,2))
-    return '\n'.join(rL) + '\n'
-
-def xor(L):
-    r = 0
-    for n in L:
-        r = r ^ n
-    return r
+from gmath import xor_reduce
+from fmt import fmt_matrix, fmt_matrix_mul
 
 def dot(L1,L2):
     rL = [gm(x,y) for x,y in zip(L1,L2)]
-    return xor(rL)
+    return xor_reduce(rL)
 
 fM = [[2,3,1,1],
       [1,2,3,1],
@@ -31,7 +23,7 @@ rM = [[14,11,13, 9],
       [11,13, 9,14]]
      
       
-def mmul(a,b):
+def matrix_mul(a,b):
     b = zip(*b)
     rL = list()
     for i in range(4):
@@ -42,43 +34,51 @@ def mmul(a,b):
         rL.append(sL)
     return rL
     
-M = mmul(fM,fM)
-print(fmt(M))
+P = matrix_mul(fM,fM)
+print(fmt_matrix_mul(
+          fmt_matrix(fM),
+          fmt_matrix(fM),
+          fmt_matrix(P)))
 
 '''
- 5  0  4  0
- 0  5  0  4
- 4  0  5  0
- 0  4  0  5
+ 2  3  1  1     2  3  1  1     5  0  4  0
+ 1  2  3  1     1  2  3  1     0  5  0  4
+ 1  1  2  3     1  1  2  3     4  0  5  0
+ 3  1  1  2     3  1  1  2     0  4  0  5
 '''
 
-M = mmul(fM,M)
-print(fmt(M))
+P2 = matrix_mul(fM,P)
+print(fmt_matrix_mul(
+          fmt_matrix(fM),
+          fmt_matrix(P),
+          fmt_matrix(P2)))
 
 '''
-fM * fM = rM
-14 11 13  9
- 9 14 11 13
-13  9 14 11
-11 13  9 14
+ 2  3  1  1     5  0  4  0    14 11 13  9
+ 1  2  3  1     0  5  0  4     9 14 11 13
+ 1  1  2  3     4  0  5  0    13  9 14 11
+ 3  1  1  2     0  4  0  5    11 13  9 14
 '''
 
-M = mmul(fM,M)
-print(fmt(M))
+I = matrix_mul(fM,P2)
+print(fmt_matrix_mul(
+          fmt_matrix(fM),
+          fmt_matrix(P2),
+          fmt_matrix(I)))
 
 '''
-fM * fM * fM = I
- 1  0  0  0
- 0  1  0  0
- 0  0  1  0
- 0  0  0  1
+ 2  3  1  1    14 11 13  9     1  0  0  0
+ 1  2  3  1     9 14 11 13     0  1  0  0
+ 1  1  2  3    13  9 14 11     0  0  1  0
+ 3  1  1  2    11 13  9 14     0  0  0  1
 '''
 
-M = mmul(fM,rM)
-print(fmt(M))
+M = matrix_mul(fM,rM)
+print(fmt_matrix_mul(M))
+
+# fM * rM = I
 
 '''
-fM * rM = I
  1  0  0  0
  0  1  0  0
  0  0  1  0
